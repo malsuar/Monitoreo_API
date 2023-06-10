@@ -2,6 +2,7 @@ from fastapi import APIRouter
 from config.db import conn
 from schemas.monitoreo import monitoreoEntity, muchosmonitoreosEntity
 from models.monitoreo import Monitoreo
+import datetime
 
 monitoreo = APIRouter()
 @monitoreo.get('/monitoreo') 
@@ -17,6 +18,8 @@ def find_monitoreo_temperatura():
 @monitoreo.post('/monitoreo')
 def save_monitoreo(mon: Monitoreo):
     new_mon=dict(mon)
+    new_mon['createdAT'] = datetime.datetime.utcnow()
+    new_mon['updatedAT'] = datetime.datetime.utcnow()
     conn.monitoreo.dato.insert_one(new_mon)
     return 'Dato almacenado'
 
